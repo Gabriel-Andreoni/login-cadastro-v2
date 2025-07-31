@@ -3,6 +3,7 @@ import { Form } from "../Form";
 import { createUser } from "@/app/actions/createUser";
 import { Input } from "../Input";
 import { useRouter } from "next/navigation";
+import { Loader } from "../Loader";
 
 export function RegisterForm() {
   const [userName, setUserName] = useState<string>("");
@@ -27,8 +28,8 @@ export function RegisterForm() {
       setError(true);
       setIsPending(false);
     } else {
+      localStorage.setItem("userName", userName)
       await createUser(userName, email, password);
-      localStorage.setItem("userName", userName);
       setIsPending(false);
       setUserName("");
       setEmail("");
@@ -49,7 +50,7 @@ export function RegisterForm() {
         <Input
           onChange={(e) => setUserName(e.target.value)}
           value={userName}
-          placeholder="Nome do Usuário"
+          placeholder="Nome Completo"
           className={`p-2 border ${
             error ? "border-red-500" : "border-blue-500"
           } text-slate-950 outline-none transition-all`}
@@ -111,7 +112,7 @@ export function RegisterForm() {
         </span>
 
         <button className="p-2 bg-white cursor-pointer">
-          {isPending ? "Cadastrando..." : "Cadastrar"}
+          {isPending ? <Loader /> : "Cadastrar"}
         </button>
       </Form>
     </>
